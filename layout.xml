@@ -1,0 +1,36 @@
+<layout id="WatchFace">
+    <label id="BatteryLabel"
+           x="center"
+           y="6%"
+           justification="Graphics.TEXT_JUSTIFY_CENTER"
+           font="Graphics.FONT_TINY"
+           color="Graphics.COLOR_GREEN" />
+
+    <label id="TimeLabel"
+           x="center"
+           y="24%"
+           justification="Graphics.TEXT_JUSTIFY_CENTER"
+           font="Graphics.FONT_NUMBER_MEDIUM"
+           color="Graphics.COLOR_WHITE" />
+
+    <label id="DateLabel"
+           x="center"
+           y="48%"
+           justification="Graphics.TEXT_JUSTIFY_CENTER"
+           font="Graphics.FONT_SMALL"
+           color="Graphics.COLOR_LT_GRAY" />
+
+    <label id="HeartLabel"
+           x="30%"
+           y="66%"
+           justification="Graphics.TEXT_JUSTIFY_CENTER"
+           font="Graphics.FONT_SMALL"
+           color="Graphics.COLOR_RED" />
+
+    <label id="StepsLabel"
+           x="70%"
+           y="66%"
+           justification="Graphics.TEXT_JUSTIFY_CENTER"
+           font="Graphics.FONT_SMALL"
+           color="Graphics.COLOR_ORANGE" />
+</layout>
