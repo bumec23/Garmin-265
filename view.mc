@@ -1,3 +1,5 @@
+import Toybox.Activity;
+import Toybox.ActivityMonitor;
 import Toybox.Application;
 import Toybox.Graphics;
 import Toybox.Lang;
@@ -16,6 +18,13 @@ class Minimal265View extends WatchUi.WatchFace {
 
     function onLayout(dc as Dc) as Void {
         setLayout(Rez.Layouts.WatchFace(dc));
+    }
+
+    private function setLabel(id as String, text as String) as Void {
+        var label = View.findDrawableById(id) as WatchUi.Text?;
+        if (label != null) {
+            label.setText(text);
+        }
     }
 
     function onUpdate(dc as Dc) as Void {
@@ -42,16 +51,11 @@ class Minimal265View extends WatchUi.WatchFace {
 
         var timeString;
         if (_isSleeping) {
-            // Mode hemat daya: tanpa detik
             timeString = useMilitary ? (hh + mm) : (hh + ":" + mm);
         } else {
             timeString = useMilitary ? (hh + mm + ":" + ss) : (hh + ":" + mm + ":" + ss);
         }
-
-        var timeLabel = View.findDrawableById("TimeLabel") as WatchUi.Text?;
-        if (timeLabel != null) {
-            timeLabel.setText(timeString);
-        }
+        setLabel("TimeLabel", timeString);
 
         // 2. TANGGAL
         var dateInfo = Gregorian.info(Time.now(), Time.FORMAT_SHORT);
@@ -60,13 +64,34 @@ class Minimal265View extends WatchUi.WatchFace {
             dateInfo.month.format("%02d"),
             dateInfo.year.format("%04d")
         ]);
+        setLabel("DateLabel", dateString);
 
-        var dateLabel = View.findDrawableById("DateLabel") as WatchUi.Text?;
-        if (dateLabel != null) {
-            dateLabel.setText(dateString);
+        // 3. BATERAI
+        var batt = System.getSystemStats().battery.toNumber();
+        setLabel("BatteryLabel", batt.format("%d") + "%");
+        var battLabel = View.findDrawableById("BatteryLabel") as WatchUi.Text?;
+        if (battLabel != null) {
+            battLabel.setColor(batt <= 20 ? Graphics.COLOR_RED : Graphics.COLOR_GREEN);
         }
 
-        // 3. GAMBAR
+        // 4. DETAK JANTUNG
+        var hrString = "--";
+        var actInfo = Activity.getActivityInfo();
+        if (actInfo != null && actInfo.currentHeartRate != null) {
+            hrString = actInfo.currentHeartRate.format("%d");
+        } else {
+            var hist = ActivityMonitor.getHeartRateHistory(1, true);
+            var sample = hist.next();
+            if (sample != null && sample.heartRate != ActivityMonitor.INVALID_HR_SAMPLE) {
+                hrString = sample.heartRate.format("%d");
+            }
+        }
+        setLabel("HeartLabel", "HR " + hrString);
+        // 5. LANGKAH
+        var steps = ActivityMonitor.getInfo().steps;
+        setLabel("StepsLabel", "ST " + (steps != null ? steps.format("%d") : "--"));
+
+        // 6. GAMBAR
         View.onUpdate(dc);
     }
 
