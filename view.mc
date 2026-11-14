@@ -36,20 +36,16 @@ class Minimal265View extends WatchUi.WatchFace {
             }
         }
 
+        var hh = hours.format(is24 ? "%02d" : "%d");
+        var mm = clockTime.min.format("%02d");
+        var ss = clockTime.sec.format("%02d");
+
         var timeString;
         if (_isSleeping) {
             // Mode hemat daya: tanpa detik
-            if (useMilitary) {
-                timeString = Lang.format("$1$$2$", [hours.format("%02d"), clockTime.min.format("%02d")]);
-            } else {
-                timeString = Lang.format("$1$:$2$", [hours.format(is24 ? "%02d" : "%d"), clockTime.min.format("%02d")]);
-            }
+            timeString = useMilitary ? (hh + mm) : (hh + ":" + mm);
         } else {
-            if (useMilitary) {
-                timeString = Lang.format("$1$$2$:$3$", [hours.format("%02d"), clockTime.min.format("%02d"), clockTime.sec.format("%02d")]);
-            } else {
-                timeString = Lang.format("$1$:$2$:$3$", [hours.format(is24 ? "%02d" : "%d"), clockTime.min.format("%02d"), clockTime.sec.format("%02d")]);
-            }
+            timeString = useMilitary ? (hh + mm + ":" + ss) : (hh + ":" + mm + ":" + ss);
         }
 
         var timeLabel = View.findDrawableById("TimeLabel") as WatchUi.Text?;
