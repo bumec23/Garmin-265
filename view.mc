@@ -347,9 +347,9 @@ class Minimal265View extends WatchUi.WatchFace {
             var c = Math.cos(a);
 
             var outer = r - 2;
-            var inner = isHour ? (r - 16) : (r - 9);
+            var inner = isHour ? (r - 18) : (r - 11);
 
-            dc.setPenWidth(isHour ? 3 : 1);
+            dc.setPenWidth(isHour ? 8 : 4);
 
             dc.drawLine(
                 cx + inner * s,
@@ -380,7 +380,7 @@ class Minimal265View extends WatchUi.WatchFace {
 
             var a = i * 30.0 * Math.PI / 180.0;
 
-            var nr = r - 36;
+            var nr = r - 38;
 
             var x = cx + nr * Math.sin(a);
             var y = cy - nr * Math.cos(a);
@@ -396,20 +396,27 @@ class Minimal265View extends WatchUi.WatchFace {
         }
     }
 
-private function drawCompanyLogo(dc as Dc,
+    private function drawCompanyLogo(dc as Dc,
                                  centerX as Number,
-                                 centerY as Number) as Void {
+                                 centerY as Number,
+                                 scale as Float) as Void {
 
     if (_companyLogo == null) {
         return;
     }
 
-    dc.drawBitmap(
-        centerX - 32,
-        centerY - 30,
+    var lw = (_companyLogo.getWidth() * scale).toNumber();
+    var lh = (_companyLogo.getHeight() * scale).toNumber();
+
+    dc.drawScaledBitmap(
+        centerX - lw / 2,
+        centerY - lh / 2,
+        lw,
+        lh,
         _companyLogo
     );
-}
+    }
+
 
     // ============================================================
     // MAIN DISPLAY
@@ -654,7 +661,7 @@ private function drawCompanyLogo(dc as Dc,
             batt,
             batteryFont,
             cx,
-            (h * 30) / 100,
+            (h * 65) / 100,
             batteryFillColor,
             batteryEmptyColor,
             batteryOutlineColor,
@@ -678,13 +685,9 @@ private function drawCompanyLogo(dc as Dc,
             timeDigitGap
         );
 
-        // LOGO INOTECH
+        // LOGO (digambar paling awal supaya jadi latar)
         if (!_isSleeping || _showLogoWhenSleeping) {
-        drawCompanyLogo(
-        dc,
-        cx,
-        (h * 63) / 100
-        );
+        drawCompanyLogo(dc, cx, (h * 25) / 100, 1.5);
         }
 
         // ========================================================
@@ -726,9 +729,9 @@ private function drawCompanyLogo(dc as Dc,
             hourAngle,
             (r * 50) / 100,
             12,
-            6,
-            18,
-            8
+            10,
+            20,
+            13
         );
 
         // MINUTE HAND
@@ -741,9 +744,9 @@ private function drawCompanyLogo(dc as Dc,
             minAngle,
             (r * 76) / 100,
             12,
-            4,
-            20,
-            7
+            7,
+            22,
+            11
         );
 
         // SECOND HAND
@@ -758,9 +761,9 @@ private function drawCompanyLogo(dc as Dc,
                 secAngle,
                 (r * 95) / 100,
                 24,
-                2,
+                3,
                 14,
-                5
+                6
             );
         }
 
